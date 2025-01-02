@@ -14,7 +14,7 @@ class UserController extends Controller
     public function index(UpdateRequest $request)
     {
         $users = DB::table('users')->get();
-        return view('users.users', compact('users'));
+        return view('/admin/users.users', compact('users'));
     }
     public function bulkAction(UpdateRequest $request)
     {
@@ -38,7 +38,7 @@ class UserController extends Controller
     public function edit(){
         $userids = session('userids',[]);
         $users = DB::table('users')->whereIn('id', $userids)->get();
-        return view('users.edit', compact('users'));
+        return view('/admin/users.edit', compact('users'));
     }
     /**
      * Show the form for creating a new resource.
