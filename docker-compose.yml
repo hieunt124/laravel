@@ -1,0 +1,153 @@
+version: "3.8"
+services:
+
+    #Nginx Service
+    nginx:
+        container_name: learn_nginx
+        image: nginx:alpine
+        build: ./docker/nginx
+        command: nginx -g "daemon off;"
+        restart: unless-stopped
+        tty: true
+        links:
+            - php
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./docker/nginx/logs:/var/log/nginx
+            - ./:/var/www/html
+        networks:
+            - app-network
+
+    #PHP Service
+    php:
+        container_name: learn_php
+        image: php
+        build: ./docker/php
+        ports:
+            - "9000:9000"
+        volumes:
+            - ./:/var/www/html
+            - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+        working_dir: /var/www/html
+        networks:
+            - app-network
+
+    #composer Service
+#    composer:
+#        container_name: learn_composer
+#        image: composer
+#        volumes:
+#            - ./:/var/www/html
+#        working_dir: /var/www/html
+#       command: install
+#       networks:
+#            - app-network
+
+    #mysql Service
+    mysql:
+        image: mysql:8.0
+        container_name: learn_mysql
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: laravel@2023
+            MYSQL_DATABASE: learn
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+        volumes:
+            - data:/var/lib/mysql/
+            - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+        networks:
+            - app-network
+
+    #phpmyadmin Service
+    phpmyadmin:
+        image: phpmyadmin
+        container_name: learn_phpmyadmin
+        links:
+            - mysql
+        environment:
+            PMA_HOST: mysql
+            PMA_PORT: 3306
+            PMA_ARBITRARY: 1
+        restart: always
+        ports:
+            - "8085:80"
+        networks:
+            - app-network
+
+    # supervisor Service
+#    supervisor:
+#        image: supervisor
+#        container_name: learn_supervisor
+#        build:
+#            context: ./docker/supervisord
+#            dockerfile: Dockerfile
+#        command: /usr/bin/supervisord -n
+#        volumes:
+#            - ./docker/supervisord/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
+#        restart: always
+
+    #   supervisor redis
+#    redis:
+#        image: redis
+#        container_name: learn_redis
+#        build:
+#            context: ./docker/redis
+#            dockerfile: Dockerfile
+#       ports:
+#            - "6379:6379"
+#        volumes:
+#            - ./docker/redis/redis.conf:/usr/local/etc/redis/redis.conf
+#        command: redis-server --appendonly yes
+
+    #   elasticsearch
+#    elasticsearch:
+#        image: elasticsearch
+#        container_name: learn_elasticsearch
+#       build:
+#            context: ./docker/elasticsearch
+#            dockerfile: Dockerfile
+#        environment:
+#            - discovery.type=single-node
+#        ports:
+#            - "9200:9200"
+#            - "9300:9300"
+#        volumes:
+#            - ./docker/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+#            - ./data:/usr/share/elasticsearch/data
+#    rabbitmq:
+#        image: rabbitmq:3-management
+#        container_name: learn_rabbitmq
+#        ports:
+#            - "5672:5672"
+#            - "15672:15672"
+#        volumes:
+#            - ./docker/rabbitmq:/var/lib/rabbitmq
+#            - ./docker/rabbitmq/log:/var/log/rabbitmq
+#
+#        environment:
+#            - RABBITMQ_DEFAULT_USER=admin
+#            - RABBITMQ_DEFAULT_PASS=password
+
+    mail-hog:
+        image: mailhog/mailhog
+        container_name: learn_mailhog
+        ports:
+            - "1025:1025"
+            - "8025:8025"
+
+#Docker Networks
+networks:
+    app-network:
+        driver: bridge
+
+#Volumes
+volumes:
+    data:
+        driver: local
+#    redis-data:
