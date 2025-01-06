@@ -19,7 +19,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/login', [LoginController::class, 'index'])->name('login.page');
     Route::post('/login', [LoginController::class, 'handleLogin'])->name('login.submit');
 });
-Route::group(['prefix' => 'auth'], function () {
+Route::group(['prefix' => 'auth', 'middleware' => 'auth.web'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::group(['prefix' => 'users'], function () {
