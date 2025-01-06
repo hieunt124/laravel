@@ -16,10 +16,10 @@ use \App\Http\Controllers\DashboardController;
 |
 */
 Route::group(['prefix' => 'admin'], function () {
-    Route::get('/login', [LoginController::class, 'index'])->name('login.page');
+    Route::get('/login', [LoginController::class, 'index'])->name('login');
     Route::post('/login', [LoginController::class, 'handleLogin'])->name('login.submit');
 });
-Route::group(['prefix' => 'auth', 'middleware' => 'auth.web'], function () {
+Route::group(['prefix' => 'auth', 'middleware' => 'auth'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::group(['prefix' => 'users'], function () {
