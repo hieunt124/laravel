@@ -13,16 +13,19 @@ return new class extends Migration
     {
         Schema::create('user_role', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('role_id')->constrained('roles');
+            $table->bigInteger('role_id')->unsigned()->index()->foreign()
+                ->references("id")->on("roles")->onDelete("cascade");
+            $table->bigInteger('user_id')->unsigned()->index()->foreign()
+                ->references("id")->on("users")->onDelete("cascade");
             $table->timestamps();
         });
     }
+
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_roles');
+        Schema::dropIfExists('user_role');
     }
 };
