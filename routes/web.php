@@ -26,9 +26,9 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth'], function () {
         Route::get('/register', [RegisterController::class, 'index'])->name('register');
         Route::post('/register', [RegisterController::class, 'create'])->name('register.create');
         Route::get('/', [UserController::class, 'index'])->name('users.index');
-        Route::post('/action', [UserController::class, 'bulkAction'])->name('users.action');
-        Route::get('/update', [UserController::class, 'edit'])->name('users.edit');
-        Route::post('/delete', [UserController::class, 'update'])->name('users.update');
+        Route::get('/edit/{id}', [UserController::class, 'edit'])->name('users.edit');
+        Route::post('/update/{id}', [UserController::class, 'update'])->name('users.update');
+        Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('users.delete');
     });
 });
 //Route::get('/category', [\App\Http\Controllers\CategoryController::class, 'index'])->name('category.index');
