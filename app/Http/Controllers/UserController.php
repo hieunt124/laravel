@@ -13,7 +13,7 @@ class UserController extends Controller
      */
     public function index(UpdateRequest $request)
     {
-        $users = DB::table('users')->get();
+        $users = DB::table('users')->paginate(4);
         return view('/admin/users.users', compact('users'));
     }
     public function bulkAction(UpdateRequest $request)

@@ -36,11 +36,10 @@
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
                 <li class="nav-item menu-open">
-                    <a href="{{route('dashboard')}}" class="nav-link active">
-{{--                        <i class="nav-icon fas fa-tachometer-alt"></i>--}}
+                    <a href="{{route('dashboard')}}" class="nav-link @if(Route::currentRouteName()=='dashboard'){{'active'}} @endif">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Dashboard
-{{--                            <i class="right fas fa-angle-left"></i>--}}
                         </p>
                     </a>
 {{--                    <ul class="nav nav-treeview">--}}
@@ -65,11 +64,10 @@
 {{--                    </ul>--}}
                 </li>
                 <li class="nav-item">
-                    <a href="pages/widgets.html" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
+                    <a href="{{route('users.index')}}" class="nav-link @if(Route::currentRouteName()=='users.index'){{'active'}} @endif">
+                        <i class="nav-icon fas fa-user"></i>
                         <p>
-                            Widgets
-                            <span class="right badge badge-danger">New</span>
+                            User
                         </p>
                     </a>
                 </li>
