@@ -121,8 +121,10 @@
                 <td>{{ $user->email }}</td>
                 <td>{{ date('d-m-Y H:i', strtotime($user->created_at)) }}</td>
                 <td>
-                    <button href="{{route('users.edit',$user->id)}}" type="submit" name="action" value="edit"
-                            style="padding: 5px 10px;">Sửa</button>
+                    <a href="{{route('users.edit', ['id' => $user->id])}}" class="btn btn-primary">
+                        <i class="fas fa-edit"></i>
+                        {{__('Sửa')}}
+                    </a>
                     <form action="{{ route('users.delete', $user->id) }}" method="post" style="display: inline-block;">
                         @csrf
                         @method('DELETE')

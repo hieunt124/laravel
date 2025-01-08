@@ -27,10 +27,12 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth'], function () {
         Route::post('/register', [RegisterController::class, 'create'])->name('register.create');
         Route::get('/', [UserController::class, 'index'])->name('users.index');
         Route::get('/edit/{id}', [UserController::class, 'edit'])->name('users.edit');
-        Route::post('/update/{id}', [UserController::class, 'update'])->name('users.update');
+        Route::put('/update/{id}', [UserController::class, 'update'])->name('users.update');
         Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('users.delete');
     });
 });
 //Route::get('/category', [\App\Http\Controllers\CategoryController::class, 'index'])->name('category.index');
-
+Route::get('/1', function () {
+    return view('/admin/users.edit');
+});
 

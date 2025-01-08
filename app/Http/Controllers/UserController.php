@@ -17,13 +17,13 @@ class UserController extends Controller
         $users = DB::table('users')->paginate(4);
         return view('/admin/users.users', compact('users'));
     }
-    public function edit($id)
+    public function edit($id): \Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
     {
         $users = DB::table('users')->where('id', $id)->first();
         if (!$users) {
             return redirect()->route('users.index')->with('error', 'User not found!');
         }
-        return view('users.update', compact('users'));
+        return view('/admin/users.edit', compact('users'));
     }
     /**
      * Show the form for creating a new resource.
