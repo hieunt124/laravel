@@ -3,7 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 class RegisterRequest extends FormRequest
 {
 
@@ -15,7 +16,10 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'username' => 'required|unique:users,username',
+            'email' => 'required|unique:users,email',
+
         ];
     }
+
 }

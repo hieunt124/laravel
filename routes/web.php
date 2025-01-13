@@ -32,7 +32,4 @@ Route::group(['prefix' => 'auth', 'middleware' => 'auth'], function () {
     });
 });
 //Route::get('/category', [\App\Http\Controllers\CategoryController::class, 'index'])->name('category.index');
-Route::get('/1', function () {
-    return view('/admin/users.edit');
-});
 

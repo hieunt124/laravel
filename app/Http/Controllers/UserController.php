@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateRequest;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use function Laravel\Prompts\table;
-
 class UserController extends Controller
 {
     /**
@@ -14,8 +13,17 @@ class UserController extends Controller
      */
     public function index(UpdateRequest $request)
     {
+
+        $search = $request->input('search');
+        $users = DB::table('users');
+        if ($search) {
+            $users->where(function ($query) use ($search) {
+                $query->where('username', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%');
+            });
+        }
         $users = DB::table('users')->paginate(4);
-        return view('/admin/users.users', compact('users'));
+        return view('/admin/users.users', compact('users','search'));
     }
     public function edit($id): \Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
     {
@@ -60,10 +68,10 @@ class UserController extends Controller
         $update = DB::table('users')->where('id', $id)->update([
             'username' => $request->get('name'),
             'email' => $request->get('email'),
-            'updated_at' => now(),
+            'updated_at' => Carbon::now(),
     ]);
         if($update){
-            return redirect()->route('users.index')->with('success', 'Update success!');
+            return redirect()->back()->with('success', 'Update success!');
         }
         return redirect()->route('users.index')->with('error', 'Update failed!');
     }
@@ -75,7 +83,7 @@ class UserController extends Controller
     {
         $item = DB::table('users')->where('id', $id)->delete();
         if($item){
-            return redirect()->route('users.index')->with('success', 'Delete success!');
+            return redirect()->back()->with('success', 'Delete success!');
         }
         return redirect()->route('users.index')->with('error', 'Delete failed!');
     }
