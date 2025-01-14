@@ -18,7 +18,7 @@
 <form action="{{ route('users.index') }}" method="GET">
     <div class="input-group mb-3">
         <input type="text" style=" max-width: 500px" class="form-control" name="search" placeholder="Search..." value="{{ request('search') }}">
-        <button class="fas fa-search" style="color: white; background: mediumspringgreen"  type="submit" id="button-addon2"> Tìm kiếm</button>
+        <button class="fas fa-search" style="color: white; background: mediumseagreen"  type="submit" id="button-addon2"> Tìm kiếm</button>
         <a href="{{ route('register') }}" class="btn btn-primary" style="color: white; background: blue; margin-left: 1500px" type="button" id="button-addon2">
             <i class="fas fa-address-book"></i>
             {{__(' Tạo mới')}}
@@ -79,5 +79,5 @@
         </div>
     </div>
 </form>
-{{$users->appends(['search' => $search])->links('admin.components.paginate')}}
+{{$users->links('admin.components.paginate')}}
 @endsection

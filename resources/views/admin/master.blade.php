@@ -26,6 +26,101 @@
     <!-- summernote -->
     <link rel="stylesheet" href="{{asset('admin/plugins/summernote/summernote-bs4.min.css')}}">
 </head>
+    <style>
+        /* Container cho bảng */
+        .pagination .active {
+            color: red;
+            font-weight: bold;
+        }
+
+        /*.pagination .page-item .page-link {*/
+        /*    display: flex;*/
+        /*    align-items: center;*/
+        /*    justify-content: center;*/
+        /*}*/
+
+        .pagination .page-item {
+            margin: 0 5px;
+        }
+
+        .pagination .page-link {
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .pagination .page-link svg {
+            vertical-align: middle;
+            width: 16px;
+            height: 16px;
+        }
+
+        .table-container {
+            width: 80%;
+            margin: auto;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Thiết kế bảng */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow: hidden;
+            border-radius: 5px;
+        }
+
+        thead {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        th {
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+        tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        td {
+            color: #333;
+        }
+
+        /* Nút hành động */
+        .btn {
+            padding: 5px 10px;
+            font-size: 14px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+</html>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
