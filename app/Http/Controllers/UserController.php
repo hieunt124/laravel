@@ -14,15 +14,18 @@ class UserController extends Controller
     public function index(UpdateRequest $request)
     {
 
-        $search = $request->input('search');
+        $search = $request->get('search');
         $users = DB::table('users');
         if ($search) {
             $users->where(function ($query) use ($search) {
                 $query->where('username', 'like', '%' . $search . '%')
                     ->orWhere('email', 'like', '%' . $search . '%');
             });
+            $users -> get();
+            $users = $users->paginate(4);
+            return view('/admin/users.users', compact('users','search'));
         }
-        $users = DB::table('users')->paginate(4);
+        $users=DB::table('users')->paginate(4);
         return view('/admin/users.users', compact('users','search'));
     }
     public function edit($id): \Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse

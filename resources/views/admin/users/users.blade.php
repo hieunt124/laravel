@@ -79,5 +79,5 @@
         </div>
     </div>
 </form>
-{{$users->links('admin.components.paginate')}}
+{{$users->appends(['search' => $search])->links('admin.components.paginate')}}
 @endsection
