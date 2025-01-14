@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RegisterController extends Controller
 {
@@ -21,18 +22,20 @@ class RegisterController extends Controller
      */
     public function create(RegisterRequest $request)
     {
+
         $data = [
             'username' => $request->get('username'),
             'email' => $request->get('email'),
             'password' => bcrypt($request->get('password')),
         ];
-
         $register = User::create($data);
         if (!$register)
         {
             return redirect()->back()->with('error', 'Register failed!');
         }
-        return redirect()->route('register')->with('success', 'Register success!');
+        else{
+            return redirect()->route('register')->with('success', 'Register success!');
+        }
     }
 
     /**

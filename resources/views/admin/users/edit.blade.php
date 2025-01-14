@@ -1,29 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sửa người dùng</title>
-</head>
-<body>
+@extends('admin.master')
+@section('content')
 <h1>Sửa thông tin người dùng</h1>
+@include('admin.components.alert')
+<form action="{{ route('users.update', $users->id) }}" method="POST">
 
-<form action="{{ route('users.update') }}" method="POST">
     @csrf
-    @method('POST')
+    @method('PUT')
 
-    @foreach ($users as $user)
-        <div style="margin-bottom: 20px; border: 1px solid #ddd; padding: 10px;">
-            <p><b>ID:</b> {{ $user->id }}</p>
-            <label for="user-name-{{ $user->id }}">Tên:</label>
-            <input type="text" id="user-name-{{ $user->id }}" name="users[{{ $user->id }}][name]" value="{{ $user->username }}">
-            <br>
-            <label for="user-email-{{ $user->id }}">Email:</label>
-            <input type="email" id="user-email-{{ $user->id }}" name="users[{{ $user->id }}][email]" value="{{ $user->email }}">
-        </div>
-    @endforeach
+    <label for="name">Name:</label>
+    <input type="text" name="name" id="name" value="{{ $users->username }}" required>
 
-    <button type="submit" style="padding: 10px 15px;">Lưu thay đổi</button>
+    <label for="email">Email:</label>
+    <input type="email" name="email" id="email" value="{{ $users->email }}" required>
+
+    <button type="submit">Update</button>
 </form>
 </body>
 </html>
+@endsection

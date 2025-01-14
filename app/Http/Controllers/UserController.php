@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateRequest;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
 class UserController extends Controller
 {
     /**
@@ -13,31 +13,27 @@ class UserController extends Controller
      */
     public function index(UpdateRequest $request)
     {
-        $users = DB::table('users')->get();
-        return view('/admin/users.users', compact('users'));
-    }
-    public function bulkAction(UpdateRequest $request)
-    {
-        $userids = $request->input('user_ids',[]);
-        if(empty($userids)){
-            return redirect()->back()->with('error', 'Please select at least one user!');
-        }
-        $action = $request->input('action');
-        if($action == 'delete'){
-            DB::table('users')->whereIn('id', $userids)->delete();
-            return redirect()->back()->with('success', 'Delete success!');
-        }
-        elseif ($action == 'edit')
-        {
-            session(['userids' => $userids]);
-            return redirect()->route('users.edit');
-        }
-        return redirect()->back()->with('error', 'Invalid action!');
 
+        $search = $request->get('search');
+        $users = DB::table('users');
+        if ($search) {
+            $users->where(function ($query) use ($search) {
+                $query->where('username', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%');
+            });
+            $users -> get();
+            $users = $users->paginate(4);
+            return view('/admin/users.users', compact('users','search'));
+        }
+        $users=DB::table('users')->paginate(4);
+        return view('/admin/users.users', compact('users','search'));
     }
-    public function edit(){
-        $userids = session('userids',[]);
-        $users = DB::table('users')->whereIn('id', $userids)->get();
+    public function edit($id): \Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
+    {
+        $users = DB::table('users')->where('id', $id)->first();
+        if (!$users) {
+            return redirect()->route('users.index')->with('error', 'User not found!');
+        }
         return view('/admin/users.edit', compact('users'));
     }
     /**
@@ -70,25 +66,28 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRequest $request)
+    public function update(UpdateRequest $request, $id)
     {
-        $updateusers = $request->input('users',[]);
-        foreach ($updateusers as $id => $data){
-            DB::table('users')
-                -> where('id', $id)
-                -> update([
-                    'username' => $data['name'],
-                    'email' => $data['email'],
-                ]);
+        $update = DB::table('users')->where('id', $id)->update([
+            'username' => $request->get('name'),
+            'email' => $request->get('email'),
+            'updated_at' => Carbon::now(),
+    ]);
+        if($update){
+            return redirect()->back()->with('success', 'Update success!');
         }
-        return redirect()->route('users.index')->with('success', 'Update success!');
+        return redirect()->route('users.index')->with('error', 'Update failed!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $item = DB::table('users')->where('id', $id)->delete();
+        if($item){
+            return redirect()->back()->with('success', 'Delete success!');
+        }
+        return redirect()->route('users.index')->with('error', 'Delete failed!');
     }
 }
